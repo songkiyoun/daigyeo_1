@@ -593,7 +593,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;hei
     <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
     <div class="bmark">◇</div>
     <div class="brand-text">
-      <div class="bname">Semo<em>View</em> Daily <span style="font-size:11px;font-family:'DM Sans',sans-serif;color:var(--dim);font-weight:400;letter-spacing:0;vertical-align:middle">v1.4</span></div>
+      <div class="bname">Semo<em>View</em> Daily <span style="font-size:11px;font-family:'DM Sans',sans-serif;color:var(--dim);font-weight:400;letter-spacing:0;vertical-align:middle">v1.5</span></div>
       <div class="bsub"><a href="https://blog.naver.com/skycreation" target="_blank">blog.naver.com/skycreation ↗</a></div>
     </div>
   </div>
@@ -896,6 +896,11 @@ try{todos=JSON.parse(localStorage.getItem('sv-todos')||'[]')}catch(_){}
   // 절기문자도 백그라운드 로드 (브리핑 절기 섹션용)
   loadJolgimuBg();
   loadNotice();
+  // 5초 후 자동 재시도 (프록시 초기 실패 대비)
+  setTimeout(()=>{
+    if(!jolgiDatesGlobal.length) loadJolgimuBg();
+    loadNotice();
+  }, 5000);
 })();
 
 function tick(){
