@@ -593,7 +593,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;hei
     <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
     <div class="bmark">◇</div>
     <div class="brand-text">
-      <div class="bname">Semo<em>View</em> Daily <span style="font-size:11px;font-family:'DM Sans',sans-serif;color:var(--dim);font-weight:400;letter-spacing:0;vertical-align:middle">v1.3</span></div>
+      <div class="bname">Semo<em>View</em> Daily <span style="font-size:11px;font-family:'DM Sans',sans-serif;color:var(--dim);font-weight:400;letter-spacing:0;vertical-align:middle">v1.4</span></div>
       <div class="bsub"><a href="https://blog.naver.com/skycreation" target="_blank">blog.naver.com/skycreation ↗</a></div>
     </div>
   </div>
@@ -895,6 +895,7 @@ try{todos=JSON.parse(localStorage.getItem('sv-todos')||'[]')}catch(_){}
   // 브리핑에서 블로그 지연 표시를 위해 백그라운드 로드
   // 절기문자도 백그라운드 로드 (브리핑 절기 섹션용)
   loadJolgimuBg();
+  loadNotice();
 })();
 
 function tick(){
