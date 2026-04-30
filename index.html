@@ -1971,21 +1971,6 @@ const ytOver=false;
 
 // 협찬 마감 임박
 const spUrgent=sponsors.filter(s=>!s.done&&s.deadline&&daysDiff(new Date(s.deadline),today)<=2&&daysDiff(new Date(s.deadline),today)>=-1);
-// 블로그 발행 지연 — 명시적으로 '발행전' 상태이면서 날짜가 과거인 것만
-// 발행 카테고리만 (블로그_발행, SNS_발행) — 결제 행 제외
-const blogOverdue=blogTimeline.filter(t=>{
-if(!t||!t.date)return false;
-if(t.cat&&t.cat.includes('결제'))return false;
-return t.status==='발행전'&&daysDiff(t.date,today)<=0;
-});
-const blogUpcoming=blogTimeline.filter(t=>{
-if(!t||!t.date)return false;
-if(t.cat&&t.cat.includes('결제'))return false;
-if(t.status!=='발행전')return false;
-const d=daysDiff(t.date,today);
-return d>0&&d<=7;
-});
-
 // ── KPI 상단 6칸
 html+=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px">
    <div class="kpi-card" onclick="nav('schedule',document.querySelector('[onclick*=\\'schedule\\']'))" style="cursor:pointer">
@@ -2005,10 +1990,6 @@ html+=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;marg
    </div>
      <div class="kpi-val ${ytOver?'danger':ytDays!==null?'ok':'dim'}">${ytDays!==null?ytDays+'일 전':'—'}</div>
      <div class="kpi-sub">${ytOver?'⚠ 업로드 필요':'정상'}</div>
-   </div>
-   <div class="kpi-label">블로그 발행 지연</div>
-     <div class="kpi-val ${blogOverdue.length?'danger':'dim'}">${blogOverdue.length}건</div>
-     <div class="kpi-sub">예정 ${blogUpcoming.length}건</div>
    </div>
    <div class="kpi-label">협찬 마감 임박</div>
      <div class="kpi-val ${spUrgent.length?'danger':'dim'}">${spUrgent.length}건</div>
@@ -2065,32 +2046,6 @@ html+=`<div class="brow"><div class="brow-left"><div class="bname">${s.brand?`<s
 });
 html+=`</div>`;
 }
-
-// ── 블로그 발행 현황 (지연 or 이번주 예정 있을 때만)
-if(blogOverdue.length||blogUpcoming.length){
-html+=`<div class="bcard ${blogOverdue.length?'alert':''}"><div class="bcardtitle">📝 블로그 발행 현황${blogOverdue.length?` <span class="tag r">지연 ${blogOverdue.length}건</span>`:''}</div>`;
-blogOverdue.slice(0,2).forEach(t=>{
-const d=Math.abs(daysDiff(t.date,today));
-html+=`<div class="brow" style="border-left:2px solid var(--red);padding-left:10px;margin-left:-2px">
-       <div class="brow-left">
-         <div class="bname" style="color:var(--red)">⚠ D+${d}일 · ${esc(t.name||t.round||'')}</div>
-         <div class="bsub-t">${esc(t.content||t.cat||'내용 미정')} · ${esc(t.status||'')}</div>
-       </div>
-       <div class="bval" style="font-size:11px;color:var(--red)">${fmtDate(t.date)}</div>
-     </div>`;
-});
-blogUpcoming.slice(0,3).forEach(t=>{
-const d=daysDiff(t.date,today);
-const lbl=d===0?'🔴 오늘':d===1?'🟡 내일':`D-${d}일`;
-html+=`<div class="brow">
-       <div class="brow-left">
-         <div class="bname">${lbl} · ${esc(t.name||t.round||'')}</div>
-         <div class="bsub-t">${esc(t.content||t.cat||'내용 미정')} · ${esc(t.status||'')}</div>
-       </div>
-       <div class="bval" style="font-size:11px;color:${d<=1?'var(--orange)':'var(--mid)'}">${fmtDate(t.date)}</div>
-     </div>`;
-});
-
 
 // ── 절기문자 임박 현황 (jolgiDatesGlobal 로드된 경우)
 if(jolgiDatesGlobal&&jolgiDatesGlobal.length){
