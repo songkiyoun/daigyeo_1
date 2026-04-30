@@ -5208,7 +5208,6 @@ function mbFormatKoreanDateTime(iso){
 function mbShareResult(){
   if(!window._mbLastPrize){ alert('공유할 결과가 없습니다.'); return; }
   const r = window._mbLastPrize;
-  const couponName = r.couponName || r.coupon || r.item || '-';
   const generatedAt = new Date().toISOString();
   const c = document.createElement('canvas');
   c.width = 1024; c.height = 1024;
@@ -5219,12 +5218,10 @@ function mbShareResult(){
   x.fillStyle = grad; x.fillRect(0,0,1024,1024);
   x.fillStyle = '#c9a96e'; x.font = '700 64px sans-serif'; x.fillText('세모뷰 데일리 - 박스 결과', 70, 130);
   x.fillStyle = '#ffffff'; x.font = '700 78px sans-serif'; x.fillText(r.item||'', 70, 330);
-  x.fillStyle = '#ffd700'; x.font = '700 60px sans-serif'; x.fillText(`등급: ${r.grade||'-'}`, 70, 430);
-  x.fillStyle = 'rgba(255,255,255,.75)'; x.font = '500 54px sans-serif';
-  x.fillText(`박스명: ${r.boxName||'-'}`, 70, 530);
-  x.fillText(`상품명: ${r.item||'-'}`, 70, 600);
-  x.fillText(`쿠폰명: ${couponName}`, 70, 670);
-  x.fillText(`수령자: ${r.recipientName||'-'}`, 70, 740);
+x.fillStyle = '#ffd700'; x.font = '700 60px sans-serif'; x.fillText(`등급: ${r.grade||'-'}`, 70, 430);
+x.fillStyle = 'rgba(255,255,255,.75)'; x.font = '500 54px sans-serif';
+x.fillText(`박스명: ${r.boxName||'-'}`, 70, 530);
+x.fillText(`수령자: ${r.recipientName||'-'}`, 70, 620);
 x.fillStyle = 'rgba(255,255,255,.55)'; 
 x.font = '500 48px sans-serif'; 
 x.fillText(mbFormatKoreanDateTime(generatedAt), 70, 910);
