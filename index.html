@@ -5225,21 +5225,30 @@ function mbShareResult(){
   x.fillText(`상품명: ${r.item||'-'}`, 70, 600);
   x.fillText(`쿠폰명: ${couponName}`, 70, 670);
   x.fillText(`수령자: ${r.recipientName||'-'}`, 70, 740);
-  x.fillStyle = 'rgba(255,255,255,.55)'; x.font = '500 48px sans-serif'; x.fillText(mbFormatKoreanDateTime(generatedAt), 70, 910);
-  c.toBlob(async (blob)=>{
-    if(!blob) return;
-    const file = new File([blob], `mystery-box-result-${Date.now()}.png`, {type:'image/png'});
-    try{
-      if(navigator.canShare && navigator.canShare({files:[file]})){
-        await navigator.share({files:[file], title:'미스테리박스 결과'});
-        return;
-      }
-    }catch(_){}
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = file.name; a.click();
-    setTimeout(()=>URL.revokeObjectURL(url), 1000);
-  }, 'image/png');
+x.fillStyle = 'rgba(255,255,255,.55)'; 
+x.font = '500 48px sans-serif'; 
+x.fillText(mbFormatKoreanDateTime(generatedAt), 70, 910);
+
+const fileName = `mystery-box-result-${Date.now()}.png`;
+const dataUrl = c.toDataURL('image/png');
+const a = document.createElement('a');
+a.href = dataUrl;
+a.download = fileName;
+a.rel = 'noopener';
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+// 일부 모바일/인앱 브라우저는 download 속성을 무시함 → 이미지 새 창 fallback
+setTimeout(()=>{
+  if(document.visibilityState === 'visible'){
+    const w = window.open('', '_blank', 'noopener');
+    if(w){
+      w.document.write(`<title>${fileName}</title><img src="${dataUrl}" style="max-width:100%;height:auto;display:block;margin:0 auto">`);
+      w.document.close();
+    }
+  }
+}, 300);
 }
 
 function mbOpenPending(idx){
